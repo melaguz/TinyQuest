@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tree"]
+size = Vector2(28, 28)
+
+[node name="Tree" type="StaticBody2D"]
+z_index = 5
+metadata/_edit_group_ = true
+
+[node name="Trunk" type="Polygon2D" parent="."]
+position = Vector2(0, 5)
+polygon = PackedVector2Array(-5, -10, 5, -10, 6, 14, -6, 14)
+color = Color(0.38, 0.22, 0.1, 1)
+
+[node name="Canopy" type="Polygon2D" parent="."]
+position = Vector2(0, -8)
+polygon = PackedVector2Array(0, -15, 12, -10, 16, 0, 11, 11, 0, 15, -12, 10, -16, 0, -11, -10)
+color = Color(0.12, 0.48, 0.22, 1)
+
+[node name="Highlight" type="Polygon2D" parent="."]
+position = Vector2(-4, -13)
+polygon = PackedVector2Array(0, -5, 6, -2, 5, 4, -2, 6, -6, 1)
+color = Color(0.25, 0.65, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_tree")
+

@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world.tscn" id="1_world"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/props/tree.tscn" id="3_tree"]
+[ext_resource type="PackedScene" path="res://scenes/props/rock.tscn" id="4_rock"]
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="5_theme"]
+
+[node name="Main" type="Node2D"]
+
+[node name="World" parent="." instance=ExtResource("1_world")]
+
+[node name="Tree" parent="." instance=ExtResource("3_tree")]
+position = Vector2(240, 176)
+
+[node name="Tree2" parent="." instance=ExtResource("3_tree")]
+position = Vector2(464, 240)
+
+[node name="Rock" parent="." instance=ExtResource("4_rock")]
+position = Vector2(336, 272)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(80, 80)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="ColorRect" parent="HUD"]
+offset_left = 8.0
+offset_top = 450.0
+offset_right = 632.0
+offset_bottom = 476.0
+color = Color(0.04, 0.08, 0.1, 0.84)
+
+[node name="Instructions" type="Label" parent="HUD/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_theme")
+text = "WASD / FRECCE  •  un passo = una cella  •  muri, alberi e rocce bloccano il passaggio"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rock"]
+size = Vector2(26, 24)
+
+[node name="Rock" type="StaticBody2D"]
+z_index = 5
+metadata/_edit_group_ = true
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-14, 10, -12, -5, -5, -13, 7, -12, 14, -3, 12, 10)
+color = Color(0.43, 0.48, 0.52, 1)
+
+[node name="Highlight" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-8, -4, -3, -9, 5, -8, 8, -4, 0, -3)
+color = Color(0.62, 0.67, 0.7, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rock")
+
