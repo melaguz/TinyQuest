@@ -1,22 +1,28 @@
-[gd_resource type="TileSet" load_steps=5 format=3]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://assets/tiles/grass.svg" id="1_grass"]
 [ext_resource type="Texture2D" path="res://assets/tiles/wall.svg" id="2_wall"]
+[ext_resource type="PackedScene" path="res://scenes/props/tree.tscn" id="3_i453o"]
+[ext_resource type="PackedScene" path="res://scenes/props/rock.tscn" id="4_yl1qj"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_grass"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ojrd"]
 texture = ExtResource("1_grass")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wall"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bbgo1"]
 texture = ExtResource("2_wall")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_yqqy7"]
+scenes/0/scene = ExtResource("3_i453o")
+scenes/1/scene = ExtResource("4_yl1qj")
+
 [resource]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_grass")
-sources/1 = SubResource("TileSetAtlasSource_wall")
-
+sources/0 = SubResource("TileSetAtlasSource_5ojrd")
+sources/1 = SubResource("TileSetAtlasSource_bbgo1")
+sources/2 = SubResource("TileSetScenesCollectionSource_yqqy7")

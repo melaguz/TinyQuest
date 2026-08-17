@@ -2,6 +2,7 @@ extends SceneTree
 
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const MAIN_SCENE := preload("res://scenes/main.tscn")
+const WORLD_SCENE := preload("res://scenes/world.tscn")
 const TILE_SIZE := 32.0
 
 var _failures := 0
@@ -19,6 +20,7 @@ func _run_all() -> void:
 	await _test_collision_blocks_cell()
 	await _test_no_drift_after_many_steps()
 	await _test_input_during_step_is_ignored()
+	_test_world_is_serialized_before_runtime()
 	await _test_main_scene_and_tile_world()
 	print("=== Result: %d checks, %d failures ===" % [_checks, _failures])
 	quit(_failures)
@@ -114,6 +116,26 @@ func _test_input_during_step_is_ignored() -> void:
 	await process_frame
 
 
+func _test_world_is_serialized_before_runtime() -> void:
+	# The scene is deliberately inspected before add_child(), so no _ready() or
+	# other runtime population could have produced these cells.
+	var world := WORLD_SCENE.instantiate()
+	var ground := world.get_node("Ground") as TileMapLayer
+	var walls := world.get_node("Obstacles") as TileMapLayer
+	var props := world.get_node("Props") as TileMapLayer
+	_check(world.get_script() == null, "world has no runtime map-generation script")
+	_check(ground.get_used_cells().size() == 280, "280 ground cells are serialized in world.tscn")
+	_check(walls.get_used_cells().size() == 75, "75 wall cells are serialized in world.tscn")
+	_check(props.get_used_cells().size() == 3, "three Scene Tile cells are serialized in world.tscn")
+	var scene_source := props.tile_set.get_source(2)
+	_check(scene_source is TileSetScenesCollectionSource, "TileSet source 2 is a scenes collection")
+	if scene_source is TileSetScenesCollectionSource:
+		_check(scene_source.get_scene_tiles_count() == 2, "Tree and Rock are available in the Scene Tile palette")
+	else:
+		_check(false, "Tree and Rock are available in the Scene Tile palette")
+	world.free()
+
+
 func _test_main_scene_and_tile_world() -> void:
 	var main := MAIN_SCENE.instantiate()
 	root.add_child(main)
@@ -121,10 +143,10 @@ func _test_main_scene_and_tile_world() -> void:
 	await physics_frame
 	var ground := main.get_node("World/Ground") as TileMapLayer
 	var walls := main.get_node("World/Obstacles") as TileMapLayer
-	_check(ground != null and ground.get_used_cells().size() == 280, "main scene builds 20x14 tile-based ground")
-	_check(walls != null and not walls.get_used_cells().is_empty(), "main scene builds collidable wall tiles")
-	_check(main.get_node_or_null("Tree") is StaticBody2D, "reusable Tree scene is instantiated")
-	_check(main.get_node_or_null("Rock") is StaticBody2D, "reusable Rock scene is instantiated")
+	var props := main.get_node("World/Props") as TileMapLayer
+	_check(ground != null and ground.get_used_cells().size() == 280, "main scene loads persistent 20x14 tile-based ground")
+	_check(walls != null and walls.get_used_cells().size() == 75, "main scene loads persistent collidable wall tiles")
+	_check(props != null and props.get_used_cells().size() == 3, "main scene loads persistent Tree/Rock Scene Tiles")
 	var player := main.get_node("Player") as GridPlayer
 	player.position = Vector2(48, 48)
 	await physics_frame
